@@ -35,7 +35,6 @@ class Answers(models.Model):
     def votecount(self):
         return self.upvote.all().count()
 
-#python manage.py create super user
-#from api.models import Questions,Answers
+
 #usr.questions_set.create("title",description="angular architeture?)
 # usr.questions_set.all()
