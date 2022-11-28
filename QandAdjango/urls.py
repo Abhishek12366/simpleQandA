@@ -18,11 +18,30 @@ from django.urls import path
 from api import views
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Snippets API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
+)
+
 router=DefaultRouter()
 router.register("users",views.UsersView,basename="users")
 router.register("questions",views.QuestionsView,basename="question")
 router.register("answers",views.AnswersView,basename="answer")
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("token/",ObtainAuthToken.as_view())
+    path("token/",ObtainAuthToken.as_view()),
+    path("", schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+   
 ]+router.urls

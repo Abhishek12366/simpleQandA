@@ -60,3 +60,4 @@ class AnswersView(ModelViewSet):
         usr=request.user
         ans.upvote.add(usr)
         return Response(data="created")
+        
