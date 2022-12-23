@@ -7,7 +7,7 @@ from django.db.models import Count
 class  Questions(models.Model):
     title=models.CharField(max_length=300)
     description=models.CharField(max_length=350)
-    image=models.ImageField(upload_to="images",null=True)
+    image=models.ImageField(upload_to="images",null=True,blank=True)
     created_date=models.DateField(auto_now_add=True)
     user=models.ForeignKey(User,on_delete=models.CASCADE)
 
