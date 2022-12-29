@@ -31,10 +31,10 @@ class SigninView(FormView):
     template_name="login.html"
     form_class=LoginForm
     def post(self,request,*args,**kw):
-        form=LoginForm(request.Post)
+        form=LoginForm(request.POST)
         if form.is_valid():
             uname=form.cleaned_data.get("username")
-            pwd=form.changed_data.get("password")
+            pwd=form.cleaned_data.get("password")
             usr=authenticate(request,username=uname,password=pwd)
             if usr:
                 login(request,usr)

@@ -1,35 +1,37 @@
-
-from api.models import Answers, Questions
+from django.shortcuts import render
 
 # Create your views here.
-from api.serializers import QuestionSerializers, UserSerilalizer,AnswerSerializer
+from api.serializers import UserSerializer,QuestionSerializer,AnswerSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from api.models import Questions
+from api.models import Questions,Answers
 from rest_framework import authentication,permissions
-from rest_framework.decorators import action 
+from rest_framework.decorators import action
 
 class UsersView(ModelViewSet):
-    serializer_class=UserSerilalizer
+    serializer_class=UserSerializer
     queryset=User.objects.all()
 
 class QuestionsView(ModelViewSet):
-    serializer_class=QuestionSerializers
+    serializer_class=QuestionSerializer
     queryset=Questions.objects.all()
     authentication_classes=[authentication.TokenAuthentication]
-    permission_class=[permissions.IsAuthenticated]
+    permission_classes=[permissions.IsAuthenticated]
 
-    def perform_create(self,serializer):
+    def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
+    # localhost:8000/question/my_questions/
     @action(methods=["GET"],detail=False)
-    def my_question(self,request,*args,**kw):
+    def my_questions(self,request,*args,**kw):
         qs=request.user.questions_set.all()
-        serializer=QuestionSerializers(qs,many=True)
+        serializer=QuestionSerializer(qs,many=True)
         return Response(data=serializer.data)
-    
-    @action(methods=["POST"],detail=True)
+
+        # qs=Questions.objects.filter(user=request.user)
+    # localhost:8000/questions/1/add_answer/
+
+    @action(methods=["post"],detail=True)
     def add_answer(self,request,*args,**kw):
         id=kw.get("pk")
         ques=Questions.objects.get(id=id)
@@ -40,13 +42,16 @@ class QuestionsView(ModelViewSet):
             return Response(data=serializer.data)
         else:
             return Response(data=serializer.errors)
-    @action(methods=["GET"],detail=True)
+    # localhost:8000/questions/1/list_answers
+    
+    @action(methods=["get"],detail=True)
     def list_answers(self,request,*args,**kw):
         id=kw.get("pk")
         ques=Questions.objects.get(id=id)
         qs=ques.answers_set.all()
         serializer=AnswerSerializer(qs,many=True)
         return Response(data=serializer.data)
+    
 
 class AnswersView(ModelViewSet):
     serializer_class=AnswerSerializer
@@ -54,10 +59,18 @@ class AnswersView(ModelViewSet):
     authentication_classes=[authentication.TokenAuthentication]
     permission_classes=[permissions.IsAuthenticated]
 
-    @action(methods=['GET'],detail=True)
+    # localhost:8000/answers/1/up_vote
+    @action(methods=["get"],detail=True)
     def upvote(self,request,*args,**kw):
-        ans=self.get_object()
+        ans=self.get_object() #answer object
         usr=request.user
         ans.upvote.add(usr)
         return Response(data="created")
-        
+
+
+
+
+
+
+
+
