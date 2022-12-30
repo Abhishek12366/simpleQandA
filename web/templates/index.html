@@ -1,12 +1,11 @@
 {%extends 'base.html'%}
+
 {%block body_block%}
-<h1>Welcome</h1>
+<h1>welcome</h1>
+
 <div class="row">
     <div class="col-4"></div>
     <div class="col-4">
-        {%for m in messages%}
-        {{m}}
-        {%endfor%}
         <form action="" method="post" enctype="multipart/form-data">
             {%csrf_token%}
             {{form.as_p}}
@@ -15,40 +14,43 @@
     </div>
     <div class="col-4"></div>
 </div>
-<hr>
-<div class="row gx-4 gx-lg-5 justify-content-center">
-    {%for q in questions%}
-    <div class="col-md-10 col-lg-8 col-xl-7">
-        <!-- Post preview-->
-        <div class="post-preview">
-            <a href="post.html">
-                <h2 class="post-title">{{q.title}}</h2>
-                <h3 class="post-subtitle">{{q.description}}</h3>
-            </a>
-            <p class="post-meta">
-                Posted by {{q.user}}
-                <a href="#!">Start Bootstrap</a>
-                on {{q.created_date}}
-            </p>
-        </div>
-        <div>
-            <form action="" method="post">
-                <input type="text">
-            </form>
 
-        </div>
-        <h5 class="post-title">Answers</h2>
-        {%for ans in q.question_answer%}
-        <div>
-            Answers={{ans}}
-            Posted by={{ans.user}}
-            Date={{ans.created_date}}
-            Likes={{ans.votecount}}
-        </div>
-        {%endfor%}
-        <!-- Divider-->
-        <hr class="my-4" />
+
+<hr>
+<!-- questions list -->
+
+<div class="row gx-4 gx-lg-5 justify-content-center">
+   {%for q in questions%}
+   
+   <div class="col-md-10 col-lg-8 col-xl-7">
+    <!-- Post preview-->
+    <div class="post-preview">
+        <a href="post.html">
+            <h2 class="post-title">{{q.title}}</h2>
+            <h5 class="post-subtitle">{{q.description}}</h5>
+        </a>
+        <p class="post-meta">
+            Posted by
+            <a href="#!">{{q.user}}</a>
+            on {{q.created_date}}
+        </p>
+    </div>
+    <h5 class="post-title">Answers</h5>
+    {%for ans in q.question_answers%}
+    <div>
+      Answer={{ans}}
+      user={{ans.user}}
+      date={{ans.created_date}}
+      votecount={{ans.votecount}}
     </div>
     {%endfor%}
+
+    <hr class="my-4" />
 </div>
+   {%endfor%}
+</div>
+
+
+<!-- end question list -->
+
 {%endblock%}

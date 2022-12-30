@@ -1,12 +1,7 @@
 from django.urls import path
-from .views import SigninView,SignupView,IndexView,add_answer,answer_upvote
-
-
+from .views import SignInView,SignUpView,IndexView
 urlpatterns = [
-    path("login",SigninView.as_view(),name="signin"),
-    path("index",IndexView.as_view(),name="index"),
-    path("register",SignupView.as_view(), name="signup"),
-    path("question/<int:id>/answer/add",add_answer,name="add-answer"),
-    path("answers/<int:id>/upvote/add",answer_upvote,name="add-upvote"),
-   
+    path("",SignInView.as_view(),name="signin"),
+    path("register",SignUpView.as_view(),name="signup"),
+    path("index",IndexView.as_view(),name="index")
 ]
